@@ -23,14 +23,22 @@ NASA_API_TOKEN = "place you API key here"
 ```
 NASA_API_TOKEN = 'place your Telegram API token here'
 ```
+
+5. Paste your Telegram chat id into the **.env** file as shown below:
+```
+CHAT_ID = 'place your chat id here'
+```
+
 Python3 should be already installed. Then use pip (or pip3, if there is a conflict with Python2) to install dependencies:
 ```
 pip install -r requirements.txt
 ```
+
 ### How to use
 
 1. Run **fetch_nasa.py** and **fetch_spacex.py** to get images.
 2. Run **post_images.py** to post fetched images on your Telegram channel.
+3. You can change the delay time for publishing images in a Telegram channel by changing the value (**in seconds**) of the environment variable **TIME_DELAY_AMOUNT** in the **.env** file. The default value is **86400**.
 
 ### Project Goals
 
