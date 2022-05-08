@@ -1,15 +1,10 @@
 import os
 import random
+
 from dotenv import load_dotenv
 
 import requests
-
-
-def create_directory(path):
-    try:
-        os.makedirs(path)
-    except FileExistsError:
-        pass
+import api_file_operations
 
 
 def fetch_spacex_launch():
@@ -19,22 +14,22 @@ def fetch_spacex_launch():
     decoded_response = response.json()
     if 'errors' in decoded_response:
         raise requests.exceptions.HTTPError(decoded_response['errors'])
-    random_spacex_launch = random.randint(0, 172)
-    links = decoded_response[random_spacex_launch]['links']['flickr']['original']
 
-    for url in links:
-        image_response = requests.get(url)
-        image_response.raise_for_status()
-        for image_number, image_name in enumerate(image_response.content):
-            image_name = 'spacex'
-            file_path = f'images/{image_number}_{image_name}.jpg'
-        with open(file_path, 'ab') as file:
-            file.write(image_response.content)
+    links = []
+
+    for flight in decoded_response:
+        for _ in flight:
+            if flight['links']['flickr']['original']:
+                links.append(flight['links']['flickr']['original'])
+
+    urls = random.sample(links, 1)
+    api_file_operations.write_spacex_images(urls)
 
 
 def main():
     load_dotenv()
-    create_directory('images')
+    os.makedirs('images', exist_ok=True)
+    fetch_spacex_launch()
 
 
 if __name__ == '__main__':
