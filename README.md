@@ -21,7 +21,7 @@ NASA_API_TOKEN = "place you API key here"
 
 4. Paste the copied Telegram API token into the **.env** file as shown below:
 ```
-NASA_API_TOKEN = 'place your Telegram API token here'
+TELEGRAM_SECRET_KEY = 'place your Telegram API token here'
 ```
 
 5. Paste your Telegram chat id into the **.env** file as shown below:
