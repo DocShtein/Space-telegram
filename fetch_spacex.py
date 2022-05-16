@@ -1,6 +1,4 @@
 import os
-import random
-
 from dotenv import load_dotenv
 
 import requests
@@ -17,13 +15,20 @@ def fetch_spacex_launch():
 
     links = []
 
-    for flight in decoded_response:
-        for _ in flight:
-            if flight['links']['flickr']['original']:
-                links.append(flight['links']['flickr']['original'])
+    for flight in reversed(decoded_response):
+        if flight['links']['flickr']['original']:
+            links.append(flight['links']['flickr']['original'])
+            break
 
-    urls = random.sample(links, 1)
-    api_file_operations.write_spacex_images(urls)
+    for url in links:
+        for image_url in url:
+            image_response = requests.get(image_url)
+            image_response.raise_for_status()
+            for image_number, image_name in enumerate(image_response.content):
+                image_name = 'spacex'
+                file_path = f'images/{image_number}_{image_name}.jpg'
+
+            api_file_operations.download_images(file_path, image_url)
 
 
 def main():
