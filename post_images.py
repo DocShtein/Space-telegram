@@ -7,17 +7,16 @@ import telegram
 
 def post_images(amount_of_time_delay, bot_token):
     bot = telegram.Bot(token=bot_token)
-    filelist = []
+
     while True:
         for root, dirs, files in os.walk('images'):
-            for file in files:
-                filelist.append(os.path.join(root, file))
-        for name in filelist:
-            with open(name, 'rb') as document:
-                bot.send_document(
-                    chat_id=os.getenv('CHAT_ID'), document=document
-                )
-            time.sleep(amount_of_time_delay)
+            for name in files:
+                name = os.path.join(root, name)
+                with open(name, 'rb') as photo:
+                    bot.send_photo(
+                        chat_id=os.getenv('CHAT_ID'), photo=photo
+                    )
+                time.sleep(amount_of_time_delay)
 
 
 def main():
