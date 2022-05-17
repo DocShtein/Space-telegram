@@ -25,21 +25,17 @@ def fetch_astronomy_picture_of_the_day(params):
 
     links = []
 
-    try:
-        for image in decoded_response:
+    for image in decoded_response:
+        try:
             links.append(image['url'])
-    except KeyError:
-        pass
+        except KeyError:
+            pass
 
-    for image_url in links:
-        image_response = requests.get(image_url, params=params)
-        image_response.raise_for_status()
-        for image_number, image_name in enumerate(image_response):
-            image_name = 'nasa_apod'
-            for extension in links:
-                file_path = f'images/{image_number}_{image_name}{get_image_extension(extension)}'
+    image_name = 'nasa_apod'
 
-        api_file_operations.download_images(
+    for image_number, image_url in enumerate(links):
+        file_path = f'images/{image_number}_{image_name}{get_image_extension(image_url)}'
+        api_file_operations.download_image(
             file_path, image_url, params=params
         )
 
@@ -53,15 +49,14 @@ def fetch_earth_polychromatic_image(params):
         raise requests.exceptions.HTTPError(decoded_response['errors'])
 
     for dictionary in decoded_response:
-        for _ in dictionary.items():
-            converted_date = datetime.datetime.fromisoformat(dictionary['date'])
-            formatted_date = converted_date.strftime("%Y/%m/%d")
-            image_url = f'https://api.nasa.gov/EPIC/archive/natural/{formatted_date}/png/{dictionary["image"]}.png'
-            file_path = f'images/{dictionary["image"]}.png'
+        converted_date = datetime.datetime.fromisoformat(dictionary['date'])
+        formatted_date = converted_date.strftime("%Y/%m/%d")
+        image_url = f'https://api.nasa.gov/EPIC/archive/natural/{formatted_date}/png/{dictionary["image"]}.png'
+        file_path = f'images/{dictionary["image"]}.png'
 
-            api_file_operations.download_images(
-                file_path, image_url, params=params
-            )
+        api_file_operations.download_image(
+            file_path, image_url, params=params
+        )
 
 
 def main():
