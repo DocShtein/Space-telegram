@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 
 import requests
+
 import api_file_operations
 
 
@@ -13,22 +14,16 @@ def fetch_spacex_launch():
     if 'errors' in decoded_response:
         raise requests.exceptions.HTTPError(decoded_response['errors'])
 
-    links = []
-
-    for flight in reversed(decoded_response):
-        if flight['links']['flickr']['original']:
-            links.append(flight['links']['flickr']['original'])
+    for links in reversed(decoded_response):
+        urls = links['links']['flickr']['original']
+        if urls:
             break
 
-    for url in links:
-        for image_url in url:
-            image_response = requests.get(image_url)
-            image_response.raise_for_status()
-            for image_number, image_name in enumerate(image_response.content):
-                image_name = 'spacex'
-                file_path = f'images/{image_number}_{image_name}.jpg'
+    image_name = 'spacex'
 
-            api_file_operations.download_images(file_path, image_url)
+    for image_number, image_url in enumerate(urls):
+        file_path = f'images/{image_number}_{image_name}.jpg'
+        api_file_operations.download_image(file_path, image_url)
 
 
 def main():
