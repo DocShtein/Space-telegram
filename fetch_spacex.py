@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 
 import requests
 
@@ -22,12 +21,11 @@ def fetch_spacex_launch():
     image_name = 'spacex'
 
     for image_number, image_url in enumerate(urls):
-        file_path = f'images/{image_number}_{image_name}.jpg'
+        file_path = f'images/{image_number}_{image_name}{api_file_operations.get_image_extension(image_url)}'
         api_file_operations.download_image(file_path, image_url)
 
 
 def main():
-    load_dotenv()
     os.makedirs('images', exist_ok=True)
     fetch_spacex_launch()
 
