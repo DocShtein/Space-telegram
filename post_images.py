@@ -1,8 +1,8 @@
 import os
 import time
-from dotenv import load_dotenv
 
 import telegram
+from dotenv import load_dotenv
 
 
 def post_images(amount_of_time_delay, bot_token):
