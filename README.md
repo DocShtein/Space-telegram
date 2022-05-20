@@ -28,6 +28,7 @@ TELEGRAM_SECRET_KEY = 'place your Telegram API token here'
 ```
 CHAT_ID = 'place your chat id here'
 ```
+6. Make a telegram bot an administrator of your channel.
 
 Python3 should be already installed. Then use pip (or pip3, if there is a conflict with Python2) to install dependencies:
 ```
